@@ -1,0 +1,43 @@
+{
+  "reviewed_on": "2026-10-01",
+  "claim_searched": "For positive integer {1,K} Gasoline inputs, position-first exact-LP iterative rounding has IR <= initial LP + K - 2 and exact original-index worst-case ratio 2 - 2/K.",
+  "conclusion": "No verified earlier resolution found in the searches performed. Priority is not established.",
+  "sources": [
+    {
+      "url": "https://perso.limos.fr/~lulorieau/docs/thesis/Master_Thesis.pdf#page=27",
+      "role": "Primary target",
+      "finding": "Conjecture 3.1.1, printed page 21, concerns two-size iterative rounding. Proposition 3.1.4 concerns a different greedy algorithm."
+    },
+    {
+      "url": "https://www.researchgate.net/publication/365161753_Approximation_Algorithms_for_the_Stock_Size_Problem_and_the_Gasoline_Problem",
+      "role": "Original algorithm",
+      "finding": "Rajkovic (2022), Algorithm 3.4.1, describes sequential LP look-ahead. Its broader 1D conjecture is not settled by this two-size result."
+    },
+    {
+      "url": "https://arxiv.org/html/2601.16849",
+      "role": "Recent primary paper",
+      "finding": "Nikoleit et al. (2026), section 2.2.4, describes the unrestricted 1D guarantee as unknown. Its refutation concerns dimensions at least two."
+    },
+    {
+      "url": "https://github.com/lumi-a/funsearch/tree/main/funsearch/gasoline",
+      "role": "Research implementation",
+      "finding": "The repository implements Gasoline iterative rounding using Gurobi. It does not supply a proof of the exact two-size claim in the inspected material."
+    }
+  ],
+  "queries": [
+    "\"gasoline\" \"iterative rounding\" \"K-2\"",
+    "\"gasoline\" \"2-2/K\"",
+    "site:github.com \"gasoline\" \"iterative rounding\" proof",
+    "site:x.com \"gasoline\" \"iterative rounding\"",
+    "\"Lorieau\" \"Conjecture 3.1.1\"",
+    "\"gasoline problem\" \"two sizes\" \"rounding\"",
+    "site:github.com \"gasoline\" \"SlotOrdered\"",
+    "site:x.com \"gasoline problem\" approximation"
+  ],
+  "limitations": [
+    "Several exact queries produced irrelevant or no useful matches; these are weak negative evidence.",
+    "GitHub and X were queried through a public web index; this does not exhaust their content.",
+    "A previous VibeMathed snapshot contained 755 entries and no matching terms; the snapshot is not a live exhaustive publication registry.",
+    "AI-generated secondary summaries that misstate the 1D guarantee were excluded as evidence of a proof."
+  ]
+}
