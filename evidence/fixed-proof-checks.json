@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "fixed_record_examples": 9,
+  "candidate_score_comparisons": 108,
+  "degenerate_examples": 4,
+  "sharpness_fixed_examples": [
+    {
+      "K": 3,
+      "n": 3,
+      "OPT": 3,
+      "IR": 4,
+      "candidate_scores": 5
+    },
+    {
+      "K": 4,
+      "n": 5,
+      "OPT": 4,
+      "IR": 6,
+      "candidate_scores": 9
+    },
+    {
+      "K": 5,
+      "n": 7,
+      "OPT": 5,
+      "IR": 8,
+      "candidate_scores": 13
+    },
+    {
+      "K": 7,
+      "n": 11,
+      "OPT": 7,
+      "IR": 12,
+      "candidate_scores": 21
+    },
+    {
+      "K": 16,
+      "n": 29,
+      "OPT": 16,
+      "IR": 30,
+      "candidate_scores": 57
+    }
+  ],
+  "sharpness_candidate_score_comparisons": 105,
+  "proof_status": "Main integer theorem and sharpness family verified in Lean 4.34.0 and replayed by Nanoda; see formal/audit/runs/01bb7023795d4c02/returned/formal-audit.json.",
+  "files_sha256": {
+    "oracle.py": "1eefdf0ac560296256d5a2b529f8e7f39af48aa5d00ad052745e0e561cd8a58e",
+    "fast_algorithm.py": "a466980e620cfddc9ce539c295e499f982e63da8d9472274d8d8a667cc3157e3",
+    "tightness_family.py": "5ca40b28f4850ebfe8e398a7c663e518dbf19bf2170068386dc9d1e8ff9163be",
+    "research-notes.tex": "623370e7d8f79b868fa186ba919d7b5afc431548c9a11dc3c69354ee5a059c8f",
+    "verify_examples.py": "269d00dca0300724adce48c22bd2a02e3db9ca076a27947fd27a03f0946e2d84"
+  },
+  "azure_job_id": "2fd1eda3170c46e6",
+  "azure_all_deleted": true
+}

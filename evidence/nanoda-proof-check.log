@@ -1,0 +1,170 @@
+theorem Gasoline.assignment_to_fraction :
+  forall {m l n : Nat} (M : Gasoline.Assignment m l n),
+  And
+    (forall (j : Fin n),
+    And
+      (LE.le (OfNat.ofNat 0)
+        (Finset.sum Finset.univ (fun (i : Fin m) => Gasoline.Assignment.large M i j)))
+      (LE.le (Finset.sum Finset.univ (fun (i : Fin m) => Gasoline.Assignment.large M i j))
+        (OfNat.ofNat 1)))
+    (Eq
+      (Finset.sum Finset.univ
+        (fun (j : Fin n) =>
+        Finset.sum Finset.univ (fun (i : Fin m) => Gasoline.Assignment.large M i j)))
+      (Nat.cast m)) :=
+  _
+
+theorem Gasoline.fraction_to_assignment (m l n : Nat) (hn : Eq n (HAdd.hAdd m l))
+  (p : Fin n → Real)
+  (hp : (forall (j : Fin n), And (LE.le (OfNat.ofNat 0) (p j)) (LE.le (p j) (OfNat.ofNat 1))))
+  (hsum : Eq (Finset.sum Finset.univ (fun (j : Fin n) => p j)) (Nat.cast m)) :
+  Exists
+    (fun (M : Gasoline.Assignment m l n) =>
+    forall (j : Fin n),
+    Eq (Finset.sum Finset.univ (fun (i : Fin m) => Gasoline.Assignment.large M i j)) (p j)) :=
+  _
+
+theorem Gasoline.normalization (h : Real) (ds : List Real) (s a b : Real) :
+  Iff
+    (Gasoline.OriginalReach (HAdd.hAdd h (OfNat.ofNat 1))
+      (List.map (fun (d : Real) => HAdd.hAdd d (OfNat.ofNat 1)) ds) s a
+      (HAdd.hAdd b (OfNat.ofNat 1))) (Gasoline.Reach h ds s a b) :=
+  _
+
+theorem Gasoline.reach_iff :
+  forall {h : Real},
+  LE.le (OfNat.ofNat 0) h → (forall (ds : List Real),
+  (forall (d : Real), Membership.mem ds d → LE.le (OfNat.ofNat 0) d) → (forall (s a b : Real),
+  LE.le a (OfNat.ofNat 0) → LE.le (OfNat.ofNat 0) b → LE.le a s → LE.le s b → Iff
+    (Gasoline.Reach h ds s a b)
+    (And (LE.le (Gasoline.internal h ds) (HSub.hSub b a))
+      (And (LE.le a (HSub.hSub s (Gasoline.deficit h ds)))
+        (And (LE.le (Gasoline.terminal h ds) b)
+          (And (LE.le (OfNat.ofNat 0) (HSub.hSub (List.sum ds) s))
+            (LE.le (HSub.hSub (List.sum ds) s) (Gasoline.budget h ds)))))))) :=
+  _
+
+theorem Gasoline.prefix_lower :
+  forall {h : Real},
+  LE.le (OfNat.ofNat 0) h → (forall (ds : List Real),
+  (forall (d : Real), Membership.mem ds d → LE.le (OfNat.ofNat 0) d) → (forall (s A B a b :
+      Real),
+  LE.le A (OfNat.ofNat 0) → LE.le (OfNat.ofNat 0) B → LE.le A s → LE.le s B → Gasoline.Band
+      h ds s A B a b →
+  LE.le (Gasoline.prefixValue h ds s A B) (HSub.hSub b a))) :=
+  _
+
+theorem Gasoline.prefix_attained :
+  forall {h : Real},
+  LE.le (OfNat.ofNat 0) h → (forall (ds : List Real),
+  (forall (d : Real), Membership.mem ds d → LE.le (OfNat.ofNat 0) d) → (forall (s A B : Real),
+  LE.le A (OfNat.ofNat 0) → LE.le (OfNat.ofNat 0) B → LE.le A s → LE.le s B → LE.le
+      (OfNat.ofNat 0) (HSub.hSub (List.sum ds) s) →
+  LE.le (HSub.hSub (List.sum ds) s) (Gasoline.budget h ds) → Exists
+    (fun (a : Real) =>
+    Exists
+      (fun (b : Real) =>
+      And (Gasoline.Band h ds s A B a b)
+        (Eq (HSub.hSub b a) (Gasoline.prefixValue h ds s A B)))))) :=
+  _
+
+theorem Gasoline.Integer.score_formula (h d : Int) (ds : List Int) (s A B z : Int)
+  (hz : LE.le (OfNat.ofNat 0) z) (hAs : LE.le A s) :
+  Eq (Gasoline.Integer.score h d ds s A B z)
+    (Max.max
+      (Max.max (Gasoline.Integer.internal h ds)
+        (Max.max (HSub.hSub (Max.max B (Gasoline.Integer.terminal h ds)) A)
+          (HAdd.hAdd d (Gasoline.Integer.deficit h ds))))
+      (Max.max
+        (HSub.hSub
+          (HSub.hSub
+            (HAdd.hAdd (HAdd.hAdd (Max.max B (Gasoline.Integer.terminal h ds)) d)
+              (Gasoline.Integer.deficit h ds)) s) z) (HAdd.hAdd (HSub.hSub s A) z))) :=
+  _
+
+theorem Gasoline.Integer.approximation :
+  forall {h : Int},
+  LE.le (OfNat.ofNat 1) h → (forall {m k : Nat} {ds : List Int} {C : Int},
+  (forall (d : Int), Membership.mem ds d → LE.le (OfNat.ofNat 0) d) → Eq (List.length ds)
+      (HAdd.hAdd m k) →
+  Eq (List.sum ds) (HMul.hMul h (Nat.cast m)) → Gasoline.Integer.Run h m k ds (OfNat.ofNat 0)
+      (OfNat.ofNat 0) (OfNat.ofNat 0) C →
+  LE.le C
+    (HSub.hSub
+      (HAdd.hAdd (Gasoline.Integer.value h ds (OfNat.ofNat 0) (OfNat.ofNat 0) (OfNat.ofNat 0)) h)
+      (OfNat.ofNat 1))) :=
+  _
+
+theorem Gasoline.Integer.compared_to_schedule :
+  forall {h : Int},
+  LE.le (OfNat.ofNat 1) h → (forall {m k : Nat} {ds : List Int} {C a b : Int},
+  (forall (d : Int), Membership.mem ds d → LE.le (OfNat.ofNat 0) d) → Eq (List.length ds)
+      (HAdd.hAdd m k) →
+  Eq (List.sum ds) (HMul.hMul h (Nat.cast m)) → Gasoline.Integer.Run h m k ds (OfNat.ofNat 0)
+      (OfNat.ofNat 0) (OfNat.ofNat 0) C →
+  LE.le a (OfNat.ofNat 0) → LE.le (OfNat.ofNat 0) b → Gasoline.Integer.Schedule h m k ds
+      (OfNat.ofNat 0) a b →
+  LE.le (HAdd.hAdd C (OfNat.ofNat 1))
+    (HSub.hSub (HAdd.hAdd (HAdd.hAdd (HSub.hSub b a) (OfNat.ofNat 1)) (HAdd.hAdd h (OfNat.ofNat 1)))
+      (OfNat.ofNat 2))) :=
+  _
+
+theorem Gasoline.Integer.ratio_bound :
+  forall {h : Int},
+  LE.le (OfNat.ofNat 1) h → (forall {m k : Nat} {ds : List Int} {C a b : Int},
+  LT.lt (OfNat.ofNat 0) m → (forall (d : Int),
+    Membership.mem ds d → LE.le (OfNat.ofNat 0) d) →
+  Eq (List.length ds) (HAdd.hAdd m k) → Eq (List.sum ds) (HMul.hMul h (Nat.cast m)) →
+  Gasoline.Integer.Run h m k ds (OfNat.ofNat 0) (OfNat.ofNat 0) (OfNat.ofNat 0) C → LE.le a
+      (OfNat.ofNat 0) →
+  LE.le (OfNat.ofNat 0) b → Gasoline.Integer.Schedule h m k ds (OfNat.ofNat 0) a b → LE.le
+    (HMul.hMul (HAdd.hAdd h (OfNat.ofNat 1)) (HAdd.hAdd C (OfNat.ofNat 1)))
+    (HMul.hMul (HMul.hMul (OfNat.ofNat 2) h) (HAdd.hAdd (HSub.hSub b a) (OfNat.ofNat 1)))) :=
+  _
+
+theorem Gasoline.Integer.run_realizable :
+  forall {h : Int},
+  LE.le (OfNat.ofNat 1) h → (forall {m k : Nat} {ds : List Int} {s A B C : Int},
+  Gasoline.Integer.Run h m k ds s A B C → Exists
+    (fun (qs : List Int) =>
+    And (Gasoline.Integer.HeadRun h ds qs s A B C)
+      (And (forall (q : Int), Membership.mem qs q → Or (Eq q (OfNat.ofNat 0)) (Eq q h))
+        (And (Eq (List.count h qs) m) (Eq (List.count (OfNat.ofNat 0) qs) k))))) :=
+  _
+
+theorem Gasoline.Integer.exact_ratio_witness (r : Nat) :
+  let h : Int := HAdd.hAdd (Nat.cast r) (OfNat.ofNat 2);
+  let ds : List Int := List.cons (OfNat.ofNat 1) (Gasoline.Integer.blocks h (OfNat.ofNat 0) r);
+  Exists
+    (fun (xs : List Int) =>
+    Exists
+      (fun (a : Int) =>
+      Exists
+        (fun (b : Int) =>
+        And
+          (Gasoline.Integer.HeadRun h ds xs (OfNat.ofNat 0) (OfNat.ofNat 0) (OfNat.ofNat 0)
+            (HSub.hSub (HMul.hMul (OfNat.ofNat 2) h) (OfNat.ofNat 1)))
+          (And (forall (x : Int), Membership.mem xs x → Or (Eq x (OfNat.ofNat 0)) (Eq x h))
+            (And (Eq (List.count h xs) (HAdd.hAdd r (OfNat.ofNat 2)))
+              (And (Eq (List.count (OfNat.ofNat 0) xs) (HAdd.hAdd r (OfNat.ofNat 1)))
+                (And (LE.le a (OfNat.ofNat 0))
+                  (And (LE.le (OfNat.ofNat 0) b)
+                    (And
+                      (Gasoline.Integer.Schedule h (HAdd.hAdd r (OfNat.ofNat 2))
+                        (HAdd.hAdd r (OfNat.ofNat 1)) ds (OfNat.ofNat 0) a b)
+                      (And (Eq (HSub.hSub b a) h)
+                        (forall (a' b' : Int),
+                        LE.le a' (OfNat.ofNat 0) → LE.le (OfNat.ofNat 0) b' →
+                        Gasoline.Integer.Schedule h (HAdd.hAdd r (OfNat.ofNat 2))
+                            (HAdd.hAdd r (OfNat.ofNat 1)) ds (OfNat.ofNat 0) a' b' →
+                        LE.le h (HSub.hSub b' a')))))))))))) :=
+  _
+
+axiom propext {a b : Sort 0} : Iff a b → Eq a b
+
+axiom Quot.sound.{u} {α : Sort u} {r : α → α → Sort 0} {a b : α} :
+  r a b → Eq (Quot.mk r a) (Quot.mk r b)
+
+axiom Classical.choice.{u} {α : Sort u} : Nonempty α → α
+
+Checked 9451 declarations with no errors

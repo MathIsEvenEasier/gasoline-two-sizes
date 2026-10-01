@@ -1,0 +1,206 @@
+{
+  "status": "PASS",
+  "location": "Azure",
+  "modules": [
+    {
+      "name": "Assignment",
+      "exit_code": 0,
+      "seconds": 2.217
+    },
+    {
+      "name": "Reachability",
+      "exit_code": 0,
+      "seconds": 2.368
+    },
+    {
+      "name": "IntegerModel",
+      "exit_code": 0,
+      "seconds": 10.982
+    },
+    {
+      "name": "Rounding",
+      "exit_code": 0,
+      "seconds": 2.167
+    },
+    {
+      "name": "Normalization",
+      "exit_code": 0,
+      "seconds": 1.616
+    },
+    {
+      "name": "Sharpness",
+      "exit_code": 0,
+      "seconds": 5.522
+    },
+    {
+      "name": "Schedules",
+      "exit_code": 0,
+      "seconds": 2.067
+    },
+    {
+      "name": "Ties",
+      "exit_code": 0,
+      "seconds": 1.616
+    },
+    {
+      "name": "Result",
+      "exit_code": 0,
+      "seconds": 1.566
+    }
+  ],
+  "nanoda_verified": true,
+  "tool_pins": {
+    "lean": "4.34.0",
+    "mathlib": "5ed2965256430c3649e86755f9576b54eca72435"
+  },
+  "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+  "source_sha256": {
+    "Assignment.lean": "619d201a3b4672cc0dbcb94ea1a772ce8240d62a1963c987c30312135031f99c",
+    "Reachability.lean": "0f056700d4083cd4b9796ee46e4497e60002fe58c6f8caf93a3043a29b7bb989",
+    "IntegerModel.lean": "da0effafd6e3c2df4fca6ab15128d942e74acba6ba3483e64cc3072dda1d67ac",
+    "Rounding.lean": "5433b76c180416a4714ee6b8516801c2092c3e180b5ed989a891ea561b7cf493",
+    "Normalization.lean": "0c591ff34672eaf6892c13661b2788353a5b3892d0ae06efed609194c7b0e0d8",
+    "Sharpness.lean": "2e2e9a6f04c87283a512bf087ad7d812e130b88ff584acb7bc41835c883d48b0",
+    "Schedules.lean": "f342a97fbf5779ee96669d64130620e1638d2647619c6e79297a0a515b0127f9",
+    "Ties.lean": "e7dbcd0f6c697e7d059348794e54701dc1f1882e7aed2a5266cacd71694c518d",
+    "Result.lean": "d1642a275db3986a9dc0e589ace9cd74af3074d77119d92f42d685518e333353"
+  },
+  "axioms": {
+    "Gasoline.assignment_to_fraction": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.fraction_to_assignment": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.normalization": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.reach_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.prefix_lower": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.prefix_attained": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.score_formula": [
+      "propext",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.approximation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.compared_to_schedule": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.ratio_bound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.run_realizable": [
+      "propext",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.exact_ratio_witness": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "negative_control_rejected": true,
+  "nanoda": {
+    "status": "PASS",
+    "targets": [
+      "Gasoline.assignment_to_fraction",
+      "Gasoline.fraction_to_assignment",
+      "Gasoline.normalization",
+      "Gasoline.reach_iff",
+      "Gasoline.prefix_lower",
+      "Gasoline.prefix_attained",
+      "Gasoline.Integer.score_formula",
+      "Gasoline.Integer.approximation",
+      "Gasoline.Integer.compared_to_schedule",
+      "Gasoline.Integer.ratio_bound",
+      "Gasoline.Integer.run_realizable",
+      "Gasoline.Integer.exact_ratio_witness"
+    ],
+    "tool_pins": {
+      "lean": "4.34.0",
+      "rust": "1.97.1",
+      "exporter": "076e8e57707e813375e8f9da8bf989799ace9680",
+      "nanoda": "3a2407216ee84a75f9e1aead6803d0578be06ae7"
+    },
+    "rust_version": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "export_axioms": [
+      "propext",
+      "Quot.sound",
+      "Classical.choice"
+    ],
+    "export_counts": {
+      "inductive": 341,
+      "def": 2711,
+      "thm": 5628,
+      "axiom": 3,
+      "quot": 4,
+      "opaque": 12
+    },
+    "export_bytes": 49455565,
+    "export_sha256": "8562224de28e7e2b8bc69edf9fb0c68c5a7c4cd76e6c474759d1109706e79949",
+    "unsafe_or_partial_declarations": [],
+    "checked_declarations": 9451,
+    "checker_seconds": 3.319,
+    "source_unmodified": true,
+    "exporter_changes": [
+      "lean-toolchain"
+    ],
+    "control_rejected": true,
+    "control_exit_code": 101,
+    "tool_sha256": {
+      "exporter": "cbf95bb18e3fc19bbe39ad2a250d9cfce4ca01315b2acf8f630d1e315498bf60",
+      "nanoda": "84a189b03676929a05fbf969f9b06cdb3ff865a4b0cee529980bf571112e9514"
+    },
+    "checker_config": {
+      "use_stdin": false,
+      "permitted_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ],
+      "unpermitted_axiom_hard_error": true,
+      "unsafe_permit_all_axioms": false,
+      "num_threads": 1,
+      "nat_extension": true,
+      "string_extension": true,
+      "print_success_message": true,
+      "print_axioms": true,
+      "unknown_pp_declar_hard_error": true,
+      "pp_to_stdout": true,
+      "pp_options": {
+        "proofs": false,
+        "notation": false,
+        "width": 100
+      }
+    },
+    "formal_statement_independently_reviewed": false,
+    "export_gzip_sha256": "8f1642a17ab1f8493b774542db497670ddaeb9ee108815476d7e8bfaf836622e"
+  },
+  "seconds": 182.905
+}

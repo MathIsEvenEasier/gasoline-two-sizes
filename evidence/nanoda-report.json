@@ -1,0 +1,76 @@
+{
+  "status": "PASS",
+  "targets": [
+    "Gasoline.assignment_to_fraction",
+    "Gasoline.fraction_to_assignment",
+    "Gasoline.normalization",
+    "Gasoline.reach_iff",
+    "Gasoline.prefix_lower",
+    "Gasoline.prefix_attained",
+    "Gasoline.Integer.score_formula",
+    "Gasoline.Integer.approximation",
+    "Gasoline.Integer.compared_to_schedule",
+    "Gasoline.Integer.ratio_bound",
+    "Gasoline.Integer.run_realizable",
+    "Gasoline.Integer.exact_ratio_witness"
+  ],
+  "tool_pins": {
+    "lean": "4.34.0",
+    "rust": "1.97.1",
+    "exporter": "076e8e57707e813375e8f9da8bf989799ace9680",
+    "nanoda": "3a2407216ee84a75f9e1aead6803d0578be06ae7"
+  },
+  "rust_version": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+  "export_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "export_counts": {
+    "inductive": 341,
+    "def": 2711,
+    "thm": 5628,
+    "axiom": 3,
+    "quot": 4,
+    "opaque": 12
+  },
+  "export_bytes": 49455565,
+  "export_sha256": "8562224de28e7e2b8bc69edf9fb0c68c5a7c4cd76e6c474759d1109706e79949",
+  "unsafe_or_partial_declarations": [],
+  "checked_declarations": 9451,
+  "checker_seconds": 3.319,
+  "source_unmodified": true,
+  "exporter_changes": [
+    "lean-toolchain"
+  ],
+  "control_rejected": true,
+  "control_exit_code": 101,
+  "tool_sha256": {
+    "exporter": "cbf95bb18e3fc19bbe39ad2a250d9cfce4ca01315b2acf8f630d1e315498bf60",
+    "nanoda": "84a189b03676929a05fbf969f9b06cdb3ff865a4b0cee529980bf571112e9514"
+  },
+  "checker_config": {
+    "use_stdin": false,
+    "permitted_axioms": [
+      "propext",
+      "Quot.sound",
+      "Classical.choice"
+    ],
+    "unpermitted_axiom_hard_error": true,
+    "unsafe_permit_all_axioms": false,
+    "num_threads": 1,
+    "nat_extension": true,
+    "string_extension": true,
+    "print_success_message": true,
+    "print_axioms": true,
+    "unknown_pp_declar_hard_error": true,
+    "pp_to_stdout": true,
+    "pp_options": {
+      "proofs": false,
+      "notation": false,
+      "width": 100
+    }
+  },
+  "formal_statement_independently_reviewed": false,
+  "export_gzip_sha256": "8f1642a17ab1f8493b774542db497670ddaeb9ee108815476d7e8bfaf836622e"
+}

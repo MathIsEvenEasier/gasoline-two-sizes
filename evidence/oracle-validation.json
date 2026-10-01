@@ -1,0 +1,5 @@
+{
+  "status": "PASS",
+  "independent_assignment_lp_comparisons": 300,
+  "note": "Floating-point comparisons are diagnostics; exact path bounds and feasible potentials certify oracle values."
+}

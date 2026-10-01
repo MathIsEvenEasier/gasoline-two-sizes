@@ -1,0 +1,37 @@
+{
+  "use_stdin": false,
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "unpermitted_axiom_hard_error": true,
+  "unsafe_permit_all_axioms": false,
+  "num_threads": 1,
+  "nat_extension": true,
+  "string_extension": true,
+  "print_success_message": true,
+  "print_axioms": true,
+  "unknown_pp_declar_hard_error": true,
+  "pp_to_stdout": true,
+  "pp_options": {
+    "proofs": false,
+    "notation": false,
+    "width": 100
+  },
+  "export_file_path": "nanoda-proof-export.ndjson",
+  "pp_declars": [
+    "Gasoline.assignment_to_fraction",
+    "Gasoline.fraction_to_assignment",
+    "Gasoline.normalization",
+    "Gasoline.reach_iff",
+    "Gasoline.prefix_lower",
+    "Gasoline.prefix_attained",
+    "Gasoline.Integer.score_formula",
+    "Gasoline.Integer.approximation",
+    "Gasoline.Integer.compared_to_schedule",
+    "Gasoline.Integer.ratio_bound",
+    "Gasoline.Integer.run_realizable",
+    "Gasoline.Integer.exact_ratio_witness"
+  ]
+}

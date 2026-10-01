@@ -1,0 +1,3 @@
+theorem NanodaControl.probe : True := _
+
+Checked 7 declarations with no errors
