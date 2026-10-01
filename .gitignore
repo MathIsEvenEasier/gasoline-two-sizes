@@ -1,0 +1,8 @@
+*.olean
+*.ilean
+*.c
+*.o
+.lake/
+__pycache__/
+.DS_Store
+*.partial
