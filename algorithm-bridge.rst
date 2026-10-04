@@ -97,6 +97,16 @@ used. We do not claim equivalence with the literal weaker inequalities in
 Figure 1.1. This discrepancy should be visible to anyone reviewing the
 translation from the source to the formal model.
 
+For a concrete distinction, take supplies (1,3), demands (2,2), and fix the
+first delivery to 1. The equality model must then use all 3 units of the
+remaining item, requiring capacity 3. Replacing the row and column equalities
+by inequalities, without a total-use condition, permits the residual matrix
+entry 2/3 and delivers only 2 units. Starting with stock 1, the inventory
+trace becomes (1,2,0,2,0), of range 2, instead of (1,2,0,3,1), of range 3.
+The weaker model omits one unit of supply. This shows why the stated
+convention matters; it is not a claim about every other index printed in
+Figure 1.1 or about a model with an additional total-use constraint.
+
 Verification scope
 ------------------
 
