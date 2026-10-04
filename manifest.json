@@ -4,7 +4,7 @@
     ".gitignore": "09daa886c74d59c54ac60e48b04fb6a6e14d8434c9306e4c32be31085929694e",
     ".nojekyll": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
     "README.rst": "dde57773fdc34956f20d1ac9c6cfec9bd474adfac619c0adbdfcf467afa89e0b",
-    "algorithm-bridge.rst": "94de498c3a8705dfe17a0543090a0780f262e8ec05ecd0159c3ac119fd5cff26",
+    "algorithm-bridge.rst": "081ed0e8a3c68cc0e18e735360fb5084411b4861036a7661fe982c48f52bb15d",
     "evidence/Corrupt.log": "5797ea19bb748c6e3960694744218aa9a372072c78001627b48ee321dd6c18cc",
     "evidence/Result.log": "ca973e73b723e4cb386ce69c5ce5fb493c6f8fe6afee4337e9ffcbbda7cabe70",
     "evidence/algorithm-bridge-InvalidControl.lean": "4e287edfa45afed7fc0b1568a4fdd9d97921c19d1d25e847d1e8d93577954c5b",
@@ -56,9 +56,9 @@
     "scripts/verify_bridge_evidence.py": "c7cc6bac21d29bfa541d25f0483a621899ac0a82ccb5787c9ba1469006a882ee",
     "site/checks.json": "b53b8938cc4375ba28464f344f0488bd3b1907bda2b6f608f020559c49a4f821",
     "site/fixtures.json": "fcfff176d9c4d7face3b5f5d9c822145a45f45b84dc54ca78d9e0126edc99da6",
-    "site/index.html": "13ceeaf0fe063cc757d4145561e8807232b81fb956ffec7d3e53c3bf7f77ff5c",
+    "site/index.html": "c06ca8147ad0801b54b5a9823cf20b325edf377ce7815780257d4d7ff1252b9b",
     "site/lab.js": "b28119e5ba25f06a2e45c6a716d946648dac3e26332ebac3fc286507ad90fd3f",
-    "site/style.css": "c8b0c76928c13213b3eda4a481415a0fd6c49d884cfe9e6d1555bb1574b57aa2",
+    "site/style.css": "5a954c09ff0840e66cc15ae255a10c31158b0c4258e2a0d832eb2fa3f65b195d",
     "site/ui.js": "6eee959ad6161ece9f6842b7eeeaa4d6bd40b3c0a41f6c6ea5c0b98fd708c886",
     "submission.html": "fa37a162f180044621e9e8fef9956208ee902d4c6552a0f161e5ae4e65b86233"
   }

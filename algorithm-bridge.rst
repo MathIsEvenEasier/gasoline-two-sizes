@@ -9,28 +9,50 @@ proves that both rules have exactly the same possible runs on valid inputs.
 The formal chain
 ----------------
 
-1. ``AssignmentLP.lean`` defines ``MatrixBand`` using nonnegative assignment
-   matrices with row and column sums equal to one, every inventory peak and
-   trough, and the fixed prefix bounds. ``LPValue`` means an attained minimum
-   of beta minus alpha. Neither definition mentions ``score`` or ``value``.
-   ``assignment_delivery`` verifies the weighted column delivery is
-   ``1 + h * large_fraction``. ``matrixBand_iff_band`` proves equivalence with
-   bounded fractional deliveries in both directions, including supply counts.
+1. Normalize the units. ``Gasoline.normalization`` in
+   ``Normalization.lean`` preserves inventory
+   feasibility when each delivery and demand is reduced by one. Original
+   capacity is normalized capacity plus one for nonempty input.
 
-2. ``matrixLP_value`` proves that this LP minimum equals ``prefixValue + 1``.
-   ``ValidPrefix.lp_value`` transports the statement to integer data.
-   ``small_choice_iff`` and ``large_choice_iff`` then prove that comparing
-   candidate LP minima is equivalent to comparing their integer scores.
-   Feasibility and attainment are proved, not assumed as oracle properties.
+2. Define the residual assignment LP independently. ``MatrixBand`` in
+   ``AssignmentLP.lean`` uses nonnegative assignment matrices with row and
+   column sums equal to one, actual inventory peaks and troughs, and fixed
+   prefix bounds. ``LPValue`` means an attained minimum of beta minus alpha.
+   Neither definition mentions ``score`` or ``value``.
 
-3. ``Algorithm1.lean`` defines ``Algorithm1Run`` by those attained LP minima.
-   ``run_iff_algorithm1`` proves equivalence with ``Run`` for the entire
-   execution. ``algorithm1_additive_guarantee`` and ``algorithm1_ratio_bound``
-   transfer the existing bounds directly to this LP rule.
-   ``algorithm1_two_approximation`` also covers the all-small case;
-   ``algorithm1_exists`` supplies an actual run and a feasible integral schedule.
-   ``Result.lean`` additionally contains ``sharp_lp_run`` for every parameter
-   of the matching extremal family.
+3. Eliminate the matrix without changing the feasible delivery vectors.
+   ``assignment_to_fraction`` and ``fraction_to_assignment`` give both
+   directions, including empty delivery classes. ``assignment_delivery``
+   identifies the original delivery as ``1 + h * large_fraction``.
+
+4. Characterize feasible inventory bands. ``reach_iff`` solves the recursive
+   peak/trough constraints and terminal conservation condition.
+   ``matrixBand_iff_band`` connects that characterization to the assignment
+   LP, preserving the exact remaining supply counts.
+
+5. Identify the actual optimum. ``prefix_lower`` bounds every feasible
+   completion from below; ``prefix_attained`` constructs one attaining the
+   bound. ``matrixLP_value`` combines both with the matrix correspondence to
+   give the LP minimum ``prefixValue + 1``. ``ValidPrefix.lp_value`` transports
+   the result to integer data. A lower-bound formula alone would not suffice.
+
+6. Preserve each candidate decision. ``small_choice_iff`` and
+   ``large_choice_iff`` prove that comparing attained candidate LP minima
+   is equivalent to comparing integer scores, including equality and the
+   cases where one delivery class is exhausted.
+
+7. Preserve the complete execution predicate. ``ValidPrefix.small`` and
+   ``ValidPrefix.large`` maintain the conditions needed at the next step.
+   ``run_iff_algorithm1`` then proves equivalence between ``Run`` and the
+   independently defined LP-based ``Algorithm1Run`` by induction. All
+   minimum tie choices are permitted, including first-index ties.
+
+8. Apply the bound and sharpness results. ``algorithm1_additive_guarantee``
+   and ``algorithm1_ratio_bound`` transfer the proved bounds directly to
+   the LP rule. ``algorithm1_two_approximation`` includes the all-small case;
+   ``algorithm1_exists`` supplies an actual run and an integral schedule of
+   its stated capacity. ``sharp_lp_run`` in ``Result.lean`` transfers every
+   parameter of the matching extremal family.
 
 Coordinates and residual matrices
 ---------------------------------
