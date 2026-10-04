@@ -11,7 +11,10 @@ algorithm capacity 2K - 2 under original-index tie breaking. Thus the exact
 worst-case ratio is 2 - 2/K. For K = 2 the algorithm is optimal.
 
 This is a public research announcement, not a peer-reviewed publication.
-The formal statements have not yet received independent human review.
+VibeMathed currently lists the result as Candidate / Lean-checked. Its review
+requested an explicit bridge from the LP-based algorithm to the score-based
+formal run; the new bridge below addresses that request. The new bridge has
+not yet received independent human review.
 
 Interactive laboratory: https://mathiseveneasier.github.io/gasoline-two-sizes/site/
 
@@ -24,6 +27,9 @@ Inspect the work
   directory and open /site/.
 * research-notes.tex: mathematical proof and scope.
 * formal/Result.lean: final witness statement and axiom audit targets.
+* formal/Algorithm1.lean: complete equivalence of LP-based and score-based runs.
+* formal/AssignmentLP.lean: assignment-LP feasibility and its attained minimum.
+* algorithm-bridge.rst: correspondence with the source, tie rules and LP convention.
 * formal/Schedules.lean: comparison against any integral schedule.
 * formal/Assignment.lean: equivalence of fractional assignment and the
   bounded fractional supply vector.
@@ -38,14 +44,19 @@ Inspect the work
 Verification result
 -------------------
 
-The clean build passed all nine Lean modules. Nanoda independently checked
-9,451 declarations for the 12 audited targets. Both checkers rejected
-deliberately invalid controls. The proof export, checker configuration,
-logs and pinned tool revisions are included. All Azure resources used by
-the recorded jobs have been deleted; the cleanup receipts are included.
+The 4 October Azure build compiled all eleven current Lean modules and
+checked axiom dependencies for 24 targets, including the new LP bridge.
+Lean rejected the deliberately false equality used as a negative control.
+See evidence/algorithm-bridge-audit.json and its source hashes and logs.
 
-The theorem statements have not yet received independent human review.
-The Lean and Nanoda checks establish the stated formal propositions;
+The earlier Nanoda audit independently checked 9,451 declarations for the
+original 12 targets. It does not cover the new bridge. The historical proof
+export, checker configuration, logs and pinned tool revisions are retained.
+All Azure resources used by the recorded jobs have been deleted; the cleanup
+receipts are included.
+
+Independent review of the new bridge is pending.
+The Lean and Nanoda checks establish their respective formal propositions;
 the finite Python and browser checks exercise the separate implementations.
 
 Check the fixed examples
@@ -54,8 +65,10 @@ Check the fixed examples
 Run with Python 3, without external packages::
 
     python3 scripts/verify.py
+    python3 scripts/verify_bridge_evidence.py
 
-These finite checks exercise the implementations. The universal theorem is
+The first command exercises fixed implementation examples. The second checks
+recorded evidence integrity and source hashes; it does not rerun Lean. The universal theorem is
 proved in Lean, not inferred from the examples.
 
 Rebuild the Lean proof
@@ -91,6 +104,14 @@ any permitted tie path by an original input order. Sharpness.lean and
 Result.lean give the matching family and an optimal integral comparison
 schedule for every parameter.
 
+AssignmentLP.lean independently defines the residual assignment LP using
+matrix variables and actual inventory constraints. Algorithm1.lean proves
+``run_iff_algorithm1`` and transfers the additive and ratio guarantees to
+LP-based runs, including a factor-two theorem for the all-small case.
+The source convention is explicit: Figure 1.1 prints sums <= 1, while the
+text before Proposition 3.1.2 says doubly stochastic. We use sums equal to
+one, the standard assignment interpretation; see algorithm-bridge.rst.
+
 The normalized model has supplies 0 and h=K-1. Add one to each supply and
 demand to recover the original instance. Normalization.lean proves the
 corresponding equivalence of inventory-band feasibility; original
@@ -101,9 +122,10 @@ Scope and provenance
 
 The target is Conjecture 3.1.1 in Lucas Lorieau's 2024 thesis,
 https://perso.limos.fr/~lulorieau/docs/thesis/Master_Thesis.pdf#page=27 .
-This work concerns the positive-integer two-size subcase. It does not
-resolve unrestricted one-dimensional supplies or the multidimensional
-problem. The prior-art search found no verified earlier resolution of the
+This work resolves the full positive-integer two-size conjecture stated
+there, under the doubly stochastic assignment interpretation above. It does
+not resolve the broader unrestricted one-dimensional or multidimensional
+conjectures. The prior-art search found no verified earlier resolution of the
 claim, but does not establish priority.
 
 Prepared by MathIsEvenEasier with OpenAI Codex (GPT-6 Astra).

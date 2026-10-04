@@ -8,7 +8,7 @@
 \newcommand{\OPT}{\operatorname{OPT}}
 \title{A tight guarantee for iterative rounding\\in the two-size Gasoline problem\\\large Mathematical proof and computational checks}
 \author{MathIsEvenEasier}
-\date{1 October 2026}
+\date{4 October 2026}
 \begin{document}
 \maketitle
 \noindent\textbf{Status.} This document gives a mathematical proof for positive
@@ -41,7 +41,9 @@ The iterative rounding algorithm fixes positions in order. At each position it
 tries each remaining delivery, solves the assignment LP with this additional
 fixing, and keeps a candidate with the smallest LP value. Ties follow original
 input index. Lorieau's Conjecture 3.1.1 asserts $C(q_{\rm IR})\le2\OPT$.
-Its source is printed page 21 of
+This is the full positive-integer two-size conjecture, not merely a subcase
+of that conjecture. The unrestricted one-dimensional conjecture remains
+outside this result. Its source is printed page 21 of
 \href{https://perso.limos.fr/~lulorieau/docs/thesis/Master_Thesis.pdf}{Lorieau's thesis}.
 The factor-two theorem for a different greedy algorithm in that thesis does
 not by itself imply this conjecture.
@@ -70,6 +72,43 @@ rows and columns are kept integral.
 \end{proof}
 Consequently the LP asks for a minimum inventory range with $q_j$ fixed in
 the prefix and $q_j\in[1,K]$ afterwards, subject to $\sum_jq_j=\sum_jy_j$.
+
+\section{A formal bridge to the assignment-LP rule}
+The new file \texttt{AssignmentLP.lean} defines the residual LP independently
+of the closed-form score. Its predicate \texttt{MatrixBand} consists of a
+nonnegative doubly stochastic assignment matrix, the inventory peak and
+trough inequalities, and the bounds imposed by the already fixed prefix.
+\texttt{LPValue} asserts both attainment and a lower bound for every feasible
+assignment. The theorem \texttt{matrixLP\_value} identifies this minimum with
+\texttt{prefixValue}+1; the added one restores original units.
+
+In \texttt{Algorithm1.lean}, \texttt{Algorithm1Run} compares these independently
+defined LP optima. The theorem \texttt{run\_iff\_algorithm1} proves that this
+rule and the previous score-based \texttt{Run} have exactly the same complete
+runs on every valid prefix. Validity requires only nonnegative normalized
+demands, correct remaining length and supply total, and consistent prefix
+extrema; it does not assume an LP formula. Candidate feasibility and minimum
+attainment are consequences of the preceding theorems.
+
+The corollaries \texttt{algorithm1\_additive\_guarantee} and
+\texttt{algorithm1\_ratio\_bound} directly transfer the bounds to the LP rule.
+\texttt{algorithm1\_two\_approximation} includes the all-small case, while
+\texttt{algorithm1\_exists} proves existence of a run and an actual integral
+schedule of its stated capacity. The theorem \texttt{sharp\_lp\_run} in
+\texttt{Result.lean} transfers the entire extremal family as well.
+All minimum-LP ties are allowed; the first-index rule is one permitted rule.
+This does not assert that all tie paths occur for a single fixed input order.
+
+\paragraph{Source convention.}
+Figure 1.1 on printed page 4 of Lorieau's thesis displays row and column
+bounds with $\le1$, whereas the text before Proposition 3.1.2 on printed
+page 16 explicitly calls the feasible matrices doubly stochastic.
+We formalize the standard assignment interpretation with row and column sums
+\emph{equal} to one and all supplies used. We do not assert equivalence with
+the literal weaker inequalities printed in Figure 1.1. Deleting fixed
+permutation rows and columns yields our residual matrix; adjoining them
+recovers the complete assignment. The relationship to the source's notation,
+including this explicit convention, remains open to mathematical review.
 
 \section{An exact certificate for the interval relaxation}
 More generally let $q_j\in[\ell_j,u_j]$, with
@@ -447,7 +486,7 @@ and the claimed comparison schedules. These small checks are separate from
 the Azure search and do not replace the proof for arbitrary $K$.
 
 \section{Formal verification and reproducibility}
-Nine source modules were compiled in a clean Azure environment using Lean
+The original nine source modules were compiled in a clean Azure environment using Lean
 4.34.0 and mathlib commit
 \texttt{5ed2965256430c3649e86755f9576b54eca72435}.
 The checked development is structured as follows:
@@ -473,7 +512,7 @@ Here $h=K-1$, $C$ is normalized algorithm capacity, and $b-a$ is the normalized
 capacity of an arbitrary comparison schedule. The formal sharpness parameter
 $r\in\mathbb N$ represents $K=r+3$; it is not a finite enumeration.
 
-The twelve audited target statements and their complete dependencies were
+The original twelve audited target statements and their complete dependencies were
 exported and checked by unmodified Nanoda commit
 \texttt{3a2407216ee84a75f9e1aead6803d0578be06ae7}.
 Nanoda accepted 9451 declarations. The only axioms in the export are the
@@ -497,6 +536,15 @@ The clean audit ran in Azure job \texttt{01bb7023795d4c02}, with a 12 GiB
 memory limit, a 35-minute worker limit and an independent 45-minute compute
 deletion guard. Source hashes, full compiler diagnostics, checker configuration,
 a compressed proof export and negative-control logs accompany the package.
+
+On 4 October 2026, Azure job \texttt{c81bbb49c1b84185} compiled all eleven
+current proof modules, including the two new bridge modules, and checked the
+axiom dependencies of twenty-four target statements. They use only
+\texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}.
+The new bridge is not included in the historical Nanoda export: its present
+verification is by Lean. Full diagnostics, exact source hashes, a rejected
+negative control, and resource-cleanup evidence accompany the new report
+\texttt{evidence/algorithm-bridge-audit.json}.
 
 \section{An initial experiment with alternative tie rules}
 The tight family can behave better under another tie rule. However, always
