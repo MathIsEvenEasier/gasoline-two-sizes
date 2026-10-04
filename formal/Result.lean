@@ -3,6 +3,7 @@ import Normalization
 import Sharpness
 import Schedules
 import Ties
+import Algorithm1
 
 namespace Gasoline.Integer
 /-- For every K=r+3, an original-index input attains 2K-2 and has optimum K.
@@ -40,3 +41,29 @@ theorem exact_ratio_witness (r : ℕ) :
 #print axioms Gasoline.Integer.run_realizable
 #print axioms Gasoline.Integer.exact_ratio_witness
 end Gasoline.Integer
+
+namespace Gasoline.Integer
+/-- The matching extremal trace is also a run of the independently defined LP rule. -/
+theorem sharp_lp_run (r : ℕ) :
+    let h : ℤ := (r:ℤ)+2
+    Algorithm1Run h (r+2) (r+1) (1::blocks h 0 r) 0 0 0 (2*h-1) := by
+  rcases sharp_family r with ⟨hd,hlen,htotal,_,_,bad⟩
+  have valid : ValidPrefix ((r:ℤ)+2) (r+2) (r+1)
+      (1::blocks ((r:ℤ)+2) 0 r) 0 0 0 :=
+    ⟨hd,hlen,by simpa using htotal,le_rfl,le_rfl,le_rfl,le_rfl⟩
+  exact (run_iff_algorithm1 (by omega) valid).mp bad
+end Gasoline.Integer
+
+#print axioms Gasoline.assignment_delivery
+#print axioms Gasoline.Integer.sharp_lp_run
+
+#print axioms Gasoline.matrixBand_iff_band
+#print axioms Gasoline.matrixLP_value
+#print axioms Gasoline.Integer.ValidPrefix.lp_value
+#print axioms Gasoline.Integer.small_choice_iff
+#print axioms Gasoline.Integer.large_choice_iff
+#print axioms Gasoline.Integer.run_iff_algorithm1
+#print axioms Gasoline.Integer.algorithm1_additive_guarantee
+#print axioms Gasoline.Integer.algorithm1_ratio_bound
+#print axioms Gasoline.Integer.algorithm1_two_approximation
+#print axioms Gasoline.Integer.algorithm1_exists
