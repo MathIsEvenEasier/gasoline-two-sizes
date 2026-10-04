@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "job_id": "c81bbb49c1b84185",
+  "verified_on": "2026-10-04",
+  "lean": "4.34.0",
+  "mathlib": "5ed2965256430c3649e86755f9576b54eca72435",
+  "lean_build_passed": true,
+  "module_count": 11,
+  "axiom_target_count": 24,
+  "target_axioms": {
+    "Gasoline.assignment_to_fraction": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.fraction_to_assignment": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.normalization": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.reach_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.prefix_lower": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.prefix_attained": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.score_formula": [
+      "propext",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.approximation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.compared_to_schedule": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.ratio_bound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.run_realizable": [
+      "propext",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.exact_ratio_witness": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.assignment_delivery": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.sharp_lp_run": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.matrixBand_iff_band": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.matrixLP_value": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.ValidPrefix.lp_value": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.small_choice_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.large_choice_iff": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.run_iff_algorithm1": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.algorithm1_additive_guarantee": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.algorithm1_ratio_bound": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.algorithm1_two_approximation": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "Gasoline.Integer.algorithm1_exists": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "source_sha256": {
+    "Normalization.lean": "0c591ff34672eaf6892c13661b2788353a5b3892d0ae06efed609194c7b0e0d8",
+    "Schedules.lean": "f342a97fbf5779ee96669d64130620e1638d2647619c6e79297a0a515b0127f9",
+    "Ties.lean": "e7dbcd0f6c697e7d059348794e54701dc1f1882e7aed2a5266cacd71694c518d",
+    "Sharpness.lean": "2e2e9a6f04c87283a512bf087ad7d812e130b88ff584acb7bc41835c883d48b0",
+    "Reachability.lean": "0f056700d4083cd4b9796ee46e4497e60002fe58c6f8caf93a3043a29b7bb989",
+    "AssignmentLP.lean": "a1bfd31d6555719ff1693c3f0584e9a261cb5df9451821accb5b458b3e29c1ad",
+    "Rounding.lean": "5433b76c180416a4714ee6b8516801c2092c3e180b5ed989a891ea561b7cf493",
+    "Result.lean": "e4c54786da580603e81ea3c8046d4ab2cc94a9a524101e88922a3bfc27f6342f",
+    "IntegerModel.lean": "da0effafd6e3c2df4fca6ab15128d942e74acba6ba3483e64cc3072dda1d67ac",
+    "Assignment.lean": "619d201a3b4672cc0dbcb94ea1a772ce8240d62a1963c987c30312135031f99c",
+    "Algorithm1.lean": "fe37abdebc5e52461a8442d594ec232c8c3ce60584834ab71a7811fbb7a5c38a"
+  },
+  "negative_control_rejected": true,
+  "worker_exit_code": 0,
+  "started_at": "2026-10-04T15:18:11Z",
+  "finished_at": "2026-10-04T15:32:53Z",
+  "compute_memory_limit_gib": 12,
+  "worker_time_limit_minutes": 35,
+  "independent_compute_deletion_deadline": "2026-10-04T16:01:56Z",
+  "resource_cleanup": "algorithm-bridge-cleanup.json",
+  "all_resources_deleted": true,
+  "compiler_command": "lake env lean -j1 -M6000 -DwarningAsError=true -DElab.async=false -o MODULE.olean MODULE.lean",
+  "per_module_timeout_seconds": 90,
+  "build_record": "algorithm-bridge-build.json",
+  "negative_control_record": "algorithm-bridge-negative.json",
+  "reproduce_record_integrity": "python3 scripts/verify_bridge_evidence.py",
+  "verification_scope": "All eleven project modules recompiled in dependency order in a fresh bounded Azure environment used for this development session. The final build and negative control used identical source hashes. This report verifies Lean and recorded source integrity; it is not a new Nanoda audit or independent human review.",
+  "source_model_convention": "Doubly stochastic assignment, as stated before Proposition 3.1.2 in the source; no claim of equivalence with literal <= constraints in Figure 1.1.",
+  "downloaded_archive_sha256": "ac8f795624e4754d55f460876d828986e428b7ee8253634833422e99d78cd4ab"
+}
