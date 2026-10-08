@@ -1,10 +1,10 @@
 Connecting the LP algorithm to the formal guarantee
 ==================================================
 
-The reviewer identified a precise gap in presentation: ``Run`` selected the
-minimum closed-form score, while Lorieau's Algorithm 1 solves an assignment
-LP for every candidate. The new bridge defines the LP independently and
-proves that both rules have exactly the same possible runs on valid inputs.
+Lorieau's Algorithm 1 solves an assignment LP for every candidate, while
+the formal ``Run`` predicate selects the minimum closed-form score.
+``run_iff_algorithm1`` proves that these rules have the same possible runs
+on valid inputs. This document explains the correspondence.
 
 The formal chain
 ----------------
@@ -80,8 +80,8 @@ for one particular preselected input order. ``run_realizable`` separately
 proves that any allowed score path can be realized by an original input order,
 and ``exact_ratio_witness`` includes the first-index extremal construction.
 
-Source convention requiring explicit attention
-----------------------------------------------
+Assignment-matrix convention
+----------------------------
 
 The source is Lucas Lorieau's 2024 thesis:
 https://perso.limos.fr/~lulorieau/docs/thesis/Master_Thesis.pdf .
@@ -110,10 +110,10 @@ Figure 1.1 or about a model with an additional total-use constraint.
 Verification scope
 ------------------
 
-See ``evidence/algorithm-bridge-audit.json`` for the new Azure build, exact
+See ``evidence/algorithm-bridge-audit.json`` for the 4 October build, exact
 source hashes, theorem axiom lists and the rejected negative control.
 The original Nanoda record covers its original 12 targets only. The new
 bridge is checked by Lean and is not included in that historical Nanoda export.
-No independent human audit of the new bridge is claimed.
+Independent human review of the LP-to-score equivalence is pending.
 
 Prepared by MathIsEvenEasier with OpenAI Codex (GPT-6 Astra).

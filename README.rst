@@ -10,11 +10,9 @@ For each integer K >= 3, a family with 2K - 3 days attains OPT = K and
 algorithm capacity 2K - 2 under original-index tie breaking. Thus the exact
 worst-case ratio is 2 - 2/K. For K = 2 the algorithm is optimal.
 
-This is a public research announcement, not a peer-reviewed publication.
-VibeMathed currently lists the result as Candidate / Lean-checked. Its review
-requested an explicit bridge from the LP-based algorithm to the score-based
-formal run; the new bridge below addresses that request. The new bridge has
-not yet received independent human review.
+This research announcement has not been peer reviewed. VibeMathed lists
+the result as Candidate / Lean-checked. The LP-to-score equivalence added
+after review is described below; independent human review of it is pending.
 
 Interactive laboratory: https://mathiseveneasier.github.io/gasoline-two-sizes/site/
 
@@ -55,7 +53,6 @@ export, checker configuration, logs and pinned tool revisions are retained.
 All Azure resources used by the recorded jobs have been deleted; the cleanup
 receipts are included.
 
-Independent review of the new bridge is pending.
 The Lean and Nanoda checks establish their respective formal propositions;
 the finite Python and browser checks exercise the separate implementations.
 
@@ -68,8 +65,7 @@ Run with Python 3, without external packages::
     python3 scripts/verify_bridge_evidence.py
 
 The first command exercises fixed implementation examples. The second checks
-recorded evidence integrity and source hashes; it does not rerun Lean. The universal theorem is
-proved in Lean, not inferred from the examples.
+recorded evidence integrity and source hashes; it does not rerun Lean.
 
 Rebuild the Lean proof
 ----------------------

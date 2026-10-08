@@ -3,8 +3,8 @@
   "files": {
     ".gitignore": "09daa886c74d59c54ac60e48b04fb6a6e14d8434c9306e4c32be31085929694e",
     ".nojekyll": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-    "README.rst": "dde57773fdc34956f20d1ac9c6cfec9bd474adfac619c0adbdfcf467afa89e0b",
-    "algorithm-bridge.rst": "50075bcf10fb8c785d9b25d108e59fb35c3b398c4511d739089debc7948bf510",
+    "README.rst": "47021ea766a8abc680e067f9735b758fa7896674a89ed09da77ab013e4d829fc",
+    "algorithm-bridge.rst": "17f0d9b33f7466b38147abb02e83d4e7982aca57591a13059aa687cd92b91e29",
     "evidence/Corrupt.log": "5797ea19bb748c6e3960694744218aa9a372072c78001627b48ee321dd6c18cc",
     "evidence/Result.log": "ca973e73b723e4cb386ce69c5ce5fb493c6f8fe6afee4337e9ffcbbda7cabe70",
     "evidence/algorithm-bridge-InvalidControl.lean": "4e287edfa45afed7fc0b1568a4fdd9d97921c19d1d25e847d1e8d93577954c5b",
@@ -48,7 +48,7 @@
     "recorded-audit/run_full.py": "699be0ba9a2bbc1aa2070ef6816ec37ef284c89043e2fddf255b5bf567c4848e",
     "recorded-audit/run_nanoda.py": "e8e399215bca669233d6238f3bcdde9b05b6e5655a6a0d9e21758581b39267ce",
     "recorded-audit/tie_scan.py": "cb54f0ea1d696b2b3192444d0e62743b6bb17e267acb48dbebed20b5d5c37a3c",
-    "research-notes.tex": "b618ad30d977fa68140f4cf245253ccf92dca1e91fa1dc029f80fc946dfe08f3",
+    "research-notes.tex": "4a83c3f6f7acbc63fc894f19c222ed5adc74b7c96763e506453fa51037a3caa5",
     "scripts/fast_algorithm.py": "a466980e620cfddc9ce539c295e499f982e63da8d9472274d8d8a667cc3157e3",
     "scripts/oracle.py": "1eefdf0ac560296256d5a2b529f8e7f39af48aa5d00ad052745e0e561cd8a58e",
     "scripts/tightness_family.py": "5ca40b28f4850ebfe8e398a7c663e518dbf19bf2170068386dc9d1e8ff9163be",
@@ -56,10 +56,10 @@
     "scripts/verify_bridge_evidence.py": "c7cc6bac21d29bfa541d25f0483a621899ac0a82ccb5787c9ba1469006a882ee",
     "site/checks.json": "b53b8938cc4375ba28464f344f0488bd3b1907bda2b6f608f020559c49a4f821",
     "site/fixtures.json": "fcfff176d9c4d7face3b5f5d9c822145a45f45b84dc54ca78d9e0126edc99da6",
-    "site/index.html": "0d3122270e50a7841e2ad702c3a3a7890b854f3be9f96249038da0127db339b8",
+    "site/index.html": "ce02b9f744296c22f88b90d5145aa4123a17231cd443b3f6834c66375d9b7432",
     "site/lab.js": "b28119e5ba25f06a2e45c6a716d946648dac3e26332ebac3fc286507ad90fd3f",
     "site/style.css": "370d69d89f3d04626f63e7e72b29650e557e3fb51e4fd745c5dff9b8b1add96b",
     "site/ui.js": "6eee959ad6161ece9f6842b7eeeaa4d6bd40b3c0a41f6c6ea5c0b98fd708c886",
-    "submission.html": "fa37a162f180044621e9e8fef9956208ee902d4c6552a0f161e5ae4e65b86233"
+    "submission.html": "9191c6ba5aed11899afaf7d0fab0c4b11433f5289ab6fbfecdffc261584ea787"
   }
 }

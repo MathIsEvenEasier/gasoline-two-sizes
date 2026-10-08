@@ -14,9 +14,9 @@
 \noindent\textbf{Status.} This document gives a mathematical proof for positive
 integer demands and deliveries in $\{1,K\}$, including arbitrary tie choices.
 The main integer guarantee and sharpness family have been checked in Lean
-4.34.0 and replayed by the independent Nanoda checker. Computational searches
-below are independent diagnostics, not the justification of the universal claim.
-Priority and novelty have not been established by an exhaustive literature review.
+4.34.0 and replayed by the independent Nanoda checker. The searches and
+implementation checks are recorded below.
+Literature priority remains unconfirmed.
 
 \medskip\noindent\textbf{Result.} If $L_{\rm init}$ is the initial assignment-LP
 value, the algorithm returns capacity at most $L_{\rm init}+K-2$.
@@ -25,7 +25,8 @@ this proves the conjectured factor two. More precisely, for each integer
 $K\ge2$ the exact worst-case approximation ratio, with original-index tie
 breaking, is $2-2/K$. The additive bound is also attained for every such $K$.
 Thus the best constant valid uniformly in $K$ is two, approached as
-$K\to\infty$. The all-small case is trivially optimal.
+$K\to\infty$. If every delivery has size one, all delivery orders
+coincide and are optimal.
 
 \section{The target}
 Let $K>1$ be an integer, $x_i\in\{1,K\}$, $y_i$ positive integers, and
@@ -40,11 +41,10 @@ can be shifted by $-\min_j s_j$; $s_n=0$ makes this a cyclic schedule.
 The iterative rounding algorithm fixes positions in order. At each position it
 tries each remaining delivery, solves the assignment LP with this additional
 fixing, and keeps a candidate with the smallest LP value. Ties follow original
-input index. Lorieau's Conjecture 3.1.1 asserts $C(q_{\rm IR})\le2\OPT$.
-This is the full positive-integer two-size conjecture, not merely a subcase
-of that conjecture. The unrestricted one-dimensional conjecture remains
-outside this result. Its source is printed page 21 of
-\href{https://perso.limos.fr/~lulorieau/docs/thesis/Master_Thesis.pdf}{Lorieau's thesis}.
+input index. Conjecture 3.1.1 on printed page 21 of
+\href{https://perso.limos.fr/~lulorieau/docs/thesis/Master_Thesis.pdf}{Lorieau's thesis}
+asserts $C(q_{\rm IR})\le2\OPT$. The unrestricted one-dimensional
+conjecture remains outside this result.
 The factor-two theorem for a different greedy algorithm in that thesis does
 not by itself imply this conjecture.
 
@@ -55,8 +55,8 @@ There is also a direct normalization: replace each delivery $q_j$ by
 $q_j-1\in\{0,h\}$ and each demand by $d_j=y_j-1\ge0$. Post-consumption
 inventories remain unchanged, while every pre-consumption peak decreases
 by exactly one. Hence the original capacity is exactly one plus the capacity
-in this zero-or-$h$ model. This is an identity, not an approximation, and
-it preserves all comparisons made by the LP-based algorithm.
+in this zero-or-$h$ model. This shift preserves all comparisons made
+by the LP-based algorithm.
 \begin{lemma}
 The remaining fractional assignment is equivalent to choosing
 $q_j=1+h p_j$, where $0\le p_j\le1$ and $\sum_jp_j=m$.
@@ -73,8 +73,8 @@ rows and columns are kept integral.
 Consequently the LP asks for a minimum inventory range with $q_j$ fixed in
 the prefix and $q_j\in[1,K]$ afterwards, subject to $\sum_jq_j=\sum_jy_j$.
 
-\section{A formal bridge to the assignment-LP rule}
-The new file \texttt{AssignmentLP.lean} defines the residual LP independently
+\section{Equivalence with the assignment-LP rule}
+The file \texttt{AssignmentLP.lean} defines the residual LP independently
 of the closed-form score. Its predicate \texttt{MatrixBand} consists of a
 nonnegative doubly stochastic assignment matrix, the inventory peak and
 trough inequalities, and the bounds imposed by the already fixed prefix.
@@ -84,7 +84,7 @@ assignment. The theorem \texttt{matrixLP\_value} identifies this minimum with
 
 In \texttt{Algorithm1.lean}, \texttt{Algorithm1Run} compares these independently
 defined LP optima. The theorem \texttt{run\_iff\_algorithm1} proves that this
-rule and the previous score-based \texttt{Run} have exactly the same complete
+rule and the score-based \texttt{Run} have exactly the same complete
 runs on every valid prefix. Validity requires only nonnegative normalized
 demands, correct remaining length and supply total, and consistent prefix
 extrema; it does not assume an LP formula. Candidate feasibility and minimum
@@ -151,7 +151,7 @@ certificate can be computed in $O(n^2)$ operations. It certifies both a lower
 bound (one maximizing path) and a matching feasible fractional assignment.
 No numerical LP tolerance is part of an algorithmic decision.
 
-\section{A subcase that can be settled analytically}
+\section{Optimality for congruent demands}
 \begin{proposition}
 If every demand satisfies $y_j\equiv1\pmod{K-1}$, iterative rounding is
 optimal, for every input order and every tie choice. In particular, it is
@@ -172,10 +172,8 @@ preserves the best completion cost of the current prefix. Induction from
 the empty prefix proves that the returned order is optimal. For $K=2$, the
 congruence assumption modulo $1$ is automatic.
 \end{proof}
-This congruence argument alone does not settle the two-size conjecture;
-the subsequent theorem does. No separate novelty claim is made for this subcase.
-The first supply
-gap admitting genuine intermediate integral deliveries is $K=3$.
+For $K\ge3$, integral demands need not satisfy this congruence.
+The following sections treat those cases.
 
 \section{A completion bound}
 \begin{lemma}
@@ -425,7 +423,7 @@ q^*&=(1,5,1,5,1,5,5).
 The returned capacity is $8$, while the optimum is $5$.
 
 \noindent\textbf{What is sharp.}
-For fixed $K$, the ratio $2-2/K$ is attained, not merely approached.
+For fixed $K$, the family attains the ratio $2-2/K$.
 Across all integer $K$, the supremum is two: no smaller uniform constant
 works, although no finite instance with a large delivery has ratio exactly two.
 The construction uses exact LP ties and the specified original-index rule.
@@ -471,7 +469,6 @@ inputs with $2\le n\le6$, $2\le K\le5$ and both supply types present;
 the rest are random trials with $7\le n\le12$ and $2\le K\le25$ and may
 include repeats. No factor-two counterexample was found. The largest observed
 ratio was $12/7$, with $K=7$, $\OPT=7$, and algorithm cost $12$.
-These empirical facts are not premises of Theorem~\ref{thm:main}.
 
 A separate full assignment LP implementation agreed with 300 exact oracle
 evaluations. After deriving \eqref{eq:score}, 108 candidate scores on the nine
@@ -482,8 +479,7 @@ job resources were confirmed deleted at 13:02:59 UTC on 1 October 2026.
 The sharpness construction was derived algebraically, without an additional
 search. Five fixed instances at $K\in\{3,4,5,7,16\}$ were checked locally
 against the independent cycle-path oracle, including all 105 candidate scores
-and the claimed comparison schedules. These small checks are separate from
-the Azure search and do not replace the proof for arbitrary $K$.
+and the claimed comparison schedules.
 
 \section{Formal verification and reproducibility}
 The original nine source modules were compiled in a clean Azure environment using Lean
@@ -526,8 +522,8 @@ only working-tree change selected the pinned Lean toolchain.
 
 These checks establish the formal statements and their dependencies; they
 are not an external peer review of the problem translation or a priority
-certification. The Python and JavaScript implementations are separately
-cross-checked implementations, not premises of the Lean proof. The auxiliary
+certification. The Python and JavaScript implementations were checked
+separately. The auxiliary
 cycle-path certificate, completion-rounding observation, real-valued extension,
 and arithmetic complexity analysis are not claimed as separately formalized
 theorems in this package.
