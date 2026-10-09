@@ -6,31 +6,31 @@
 \newtheorem{proposition}{Proposition}
 \newtheorem{theorem}{Theorem}
 \newcommand{\OPT}{\operatorname{OPT}}
-\title{A tight guarantee for iterative rounding\\in the two-size Gasoline problem\\\large Mathematical proof and computational checks}
-\author{MathIsEvenEasier}
-\date{4 October 2026}
+\title{A tight bound for iterative rounding\\in the two-size Gasoline problem}
+\author{MathIsEvenEasier\\\small Prepared with OpenAI Codex (GPT-6 Astra)}
+\date{4 October 2026; exposition revised 9 October 2026}
 \begin{document}
 \maketitle
-\noindent\textbf{Status.} This document gives a mathematical proof for positive
-integer demands and deliveries in $\{1,K\}$, including arbitrary tie choices.
-The main integer guarantee and sharpness family have been checked in Lean
-4.34.0 and replayed by the independent Nanoda checker. The searches and
-implementation checks are recorded below.
-Literature priority remains unconfirmed.
+\begin{abstract}
+Consider the Gasoline problem with positive integer demands in a fixed
+order and delivery sizes in $\{1,K\}$, where $K\ge2$ is an integer.
+At each position, iterative rounding chooses a remaining delivery that
+minimizes the fractional completion cost. We prove that every minimum-cost
+tie choice returns capacity at most $L_{\rm init}+K-2$, where
+$L_{\rm init}$ is the initial assignment-LP value. For original-index tie
+breaking, the exact worst-case approximation ratio is $2-2/K$.
+The proof reduces the LP to an inventory-band formula and bounds the two
+possible next choices by a common invariant. The same formula implements
+the algorithm in $O(n)$ arithmetic operations. The integer guarantee,
+sharpness family and equivalence with the assignment-LP rule are checked
+in Lean.
+\end{abstract}
 
-\medskip\noindent\textbf{Result.} If $L_{\rm init}$ is the initial assignment-LP
-value, the algorithm returns capacity at most $L_{\rm init}+K-2$.
-Since $L_{\rm init}\le\OPT$ and any present large delivery forces $\OPT\ge K$,
-this proves the conjectured factor two. More precisely, for each integer
-$K\ge2$ the exact worst-case approximation ratio, with original-index tie
-breaking, is $2-2/K$. The additive bound is also attained for every such $K$.
-Thus the best constant valid uniformly in $K$ is two, approached as
-$K\to\infty$. If every delivery has size one, all delivery orders
-coincide and are optimal.
-
-\section{The target}
-Let $K>1$ be an integer, $x_i\in\{1,K\}$, $y_i$ positive integers, and
-$\sum_i x_i=\sum_i y_i$. Demand order is fixed. For a delivery order $q$, put
+\section{Model and main result}\label{sec:model}
+A delivery arrives before each day's demand is consumed. We may reorder
+the deliveries, but the demand order is fixed. The aim is to minimize the
+required inventory capacity. Let $n\ge1$, let $K>1$ be an integer, $x_i\in\{1,K\}$, $y_i$ positive integers, and
+$\sum_i x_i=\sum_i y_i$. For a delivery order $q$, put
 \[
 s_0=0,\qquad s_j=\sum_{i=1}^j(q_i-y_i),\qquad
 C(q)=\max_{1\le j\le n}(s_j+y_j)-\min_{0\le j\le n}s_j.
@@ -40,23 +40,53 @@ can be shifted by $-\min_j s_j$; $s_n=0$ makes this a cyclic schedule.
 
 The iterative rounding algorithm fixes positions in order. At each position it
 tries each remaining delivery, solves the assignment LP with this additional
-fixing, and keeps a candidate with the smallest LP value. Ties follow original
-input index. Conjecture 3.1.1 on printed page 21 of
-\href{https://perso.limos.fr/~lulorieau/docs/thesis/Master_Thesis.pdf}{Lorieau's thesis}
+fixing, and keeps a candidate with the smallest LP value. The upper bound allows every minimum-value tie choice. For sharpness,
+we use the smallest remaining original input index to break ties. The
+assignment LP uses nonnegative matrices whose row and column sums equal
+one, so every delivery is used. Write $L_{\rm init}$ for its initial
+value and $\OPT=\min_q C(q)$ for the best integral delivery order. Conjecture 3.1.1 of
+Lorieau~\cite[p.~21]{lorieau}
 asserts $C(q_{\rm IR})\le2\OPT$. The unrestricted one-dimensional
 conjecture remains outside this result.
 The factor-two theorem for a different greedy algorithm in that thesis does
 not by itself imply this conjecture.
 
-\section{Eliminating the assignment matrix}
+
+\begin{theorem}\label{thm:main}
+For positive integer demands and $x_i\in\{1,K\}$ with integer $K\ge2$,
+every run of iterative rounding satisfies
+\[
+C(q_{\rm IR})\le L_{\rm init}+K-2\le\OPT+K-2.
+\]
+In particular it is a 2-approximation. All choices among exactly tied
+minimum LP scores are permitted.
+\end{theorem}
+
+For fixed $K$, the additive bound implies the ratio $2-2/K$: when a
+large delivery is present, $\OPT\ge K$; otherwise all deliveries are
+identical. Section~\ref{sec:sharpness} gives matching examples under
+original-index tie breaking. The supremum over all $K$ is two.
+
+The proof must control a sequence of LP choices: the existence of one
+good integral completion would not show that iterative rounding finds
+one. We first replace the assignment matrix by bounded scalar deliveries
+(Section~\ref{sec:assignment}). Section~\ref{sec:prefix} gives an exact formula for the remaining
+fractional cost. In Section~\ref{sec:invariant}, that formula expresses
+the next-choice cost as the maximum of a constant and two affine
+functions. The two available deliveries cannot both exceed the claimed
+bound, which gives the induction invariant.
+Section~\ref{sec:algorithm} derives the linear-time implementation.
+
+Related work of Nikoleit, Anand, Naredla and R\"oglin~\cite{nikoleit}
+constructs adverse instances for the multidimensional iterative-rounding
+heuristic. The present theorem concerns the one-dimensional, positive-integer,
+two-size case. Appendix~\ref{app:verification} specifies the formal
+statement and its relation to the source LP; the other appendices collect
+additional consequences and computational checks.
+
+\section{Fractional assignments and normalization}\label{sec:assignment}
 Write $h=K-1$. After an integral prefix has been fixed, suppose $r$ slots and
 $m$ large deliveries remain.
-There is also a direct normalization: replace each delivery $q_j$ by
-$q_j-1\in\{0,h\}$ and each demand by $d_j=y_j-1\ge0$. Post-consumption
-inventories remain unchanged, while every pre-consumption peak decreases
-by exactly one. Hence the original capacity is exactly one plus the capacity
-in this zero-or-$h$ model. This shift preserves all comparisons made
-by the LP-based algorithm.
 \begin{lemma}
 The remaining fractional assignment is equivalent to choosing
 $q_j=1+h p_j$, where $0\le p_j\le1$ and $\sum_jp_j=m$.
@@ -73,136 +103,24 @@ rows and columns are kept integral.
 Consequently the LP asks for a minimum inventory range with $q_j$ fixed in
 the prefix and $q_j\in[1,K]$ afterwards, subject to $\sum_jq_j=\sum_jy_j$.
 
-\section{Equivalence with the assignment-LP rule}
-The file \texttt{AssignmentLP.lean} defines the residual LP independently
-of the closed-form score. Its predicate \texttt{MatrixBand} consists of a
-nonnegative doubly stochastic assignment matrix, the inventory peak and
-trough inequalities, and the bounds imposed by the already fixed prefix.
-\texttt{LPValue} asserts both attainment and a lower bound for every feasible
-assignment. The theorem \texttt{matrixLP\_value} identifies this minimum with
-\texttt{prefixValue}+1; the added one restores original units.
+For the rest of the proof, normalize the units: replace each delivery $q_j$ by
+$q_j-1\in\{0,h\}$ and each demand by $d_j=y_j-1\ge0$. Post-consumption
+inventories remain unchanged, while every pre-consumption peak decreases
+by exactly one. Hence the original capacity is exactly one plus the capacity
+in this zero-or-$h$ model. This shift preserves all comparisons made
+by the LP-based algorithm. The assignment reduction justifies
+working with these scalar deliveries instead of matrix entries.
 
-In \texttt{Algorithm1.lean}, \texttt{Algorithm1Run} compares these independently
-defined LP optima. The theorem \texttt{run\_iff\_algorithm1} proves that this
-rule and the score-based \texttt{Run} have exactly the same complete
-runs on every valid prefix. Validity requires only nonnegative normalized
-demands, correct remaining length and supply total, and consistent prefix
-extrema; it does not assume an LP formula. Candidate feasibility and minimum
-attainment are consequences of the preceding theorems.
-
-The corollaries \texttt{algorithm1\_additive\_guarantee} and
-\texttt{algorithm1\_ratio\_bound} directly transfer the bounds to the LP rule.
-\texttt{algorithm1\_two\_approximation} includes the all-small case, while
-\texttt{algorithm1\_exists} proves existence of a run and an actual integral
-schedule of its stated capacity. The theorem \texttt{sharp\_lp\_run} in
-\texttt{Result.lean} transfers the entire extremal family as well.
-All minimum-LP ties are allowed; the first-index rule is one permitted rule.
-This does not assert that all tie paths occur for a single fixed input order.
-
-\paragraph{Source convention.}
-Figure 1.1 on printed page 4 of Lorieau's thesis displays row and column
-bounds with $\le1$, whereas the text before Proposition 3.1.2 on printed
-page 16 explicitly calls the feasible matrices doubly stochastic.
-We formalize the standard assignment interpretation with row and column sums
-\emph{equal} to one and all supplies used. We do not assert equivalence with
-the literal weaker inequalities printed in Figure 1.1. Deleting fixed
-permutation rows and columns yields our residual matrix; adjoining them
-recovers the complete assignment. The relationship to the source's notation,
-including this explicit convention, remains open to mathematical review.
-
-\section{An exact certificate for the interval relaxation}
-More generally let $q_j\in[\ell_j,u_j]$, with
-$\sum_j\ell_j\le\sum_j y_j\le\sum_j u_j$. Index post-consumption inventory
-vertices cyclically by $0,\ldots,n-1$, identifying $s_n=s_0$.
-For each day $j$ insert two directed edges:
-\[
-(j-1)\longrightarrow j\quad\text{of weight }\ell_j-y_j,
-\qquad
-j\longrightarrow(j-1)\quad\text{of weight }y_j-u_j.
-\]
-An edge $a\to b$ of weight $w$ means $s_b\ge s_a+w$.
-Let $d(i,j)$ be the maximum weight of a directed path from $i$ to $j$,
-including the empty path when $i=j$, and let $p_j=\max_i d(i,j)$.
-
-\begin{proposition}
-The interval relaxation has exact value
-\[
-L=\max_{1\le j\le n}(p_j+y_j).
-\]
-A feasible solution is $q_j=p_j-p_{j-1}+y_j$, with cyclic indices.
-The formula uses only integer arithmetic when the inputs are integral.
-\end{proposition}
-\begin{proof}
-The assumptions ensure a feasible choice of supplies with the required total,
-so all directed cycles have nonpositive weight. Maximum path weights are
-finite and may be taken over simple paths. Every edge implies
-$p_b\ge p_a+w$, so the displayed $q_j$ satisfies all supply bounds.
-Its total telescopes to $\sum_jy_j$. Since empty paths give $p_j\ge0$,
-the inventory potential $p$ has troughs at least zero and peaks at most $L$;
-its capacity is at most $L$.
-
-For the reverse inequality, every feasible inventory satisfies
-$s_j-s_i\ge d(i,j)$. Capacity is at least the difference between the peak
-of day $j$ and any trough $i$, hence at least $y_j+d(i,j)$. Maximizing gives
-$C\ge L$. Translating the feasible potential to make $s_0=0$ preserves capacity.
-\end{proof}
-On a cycle, simple paths are clockwise or counterclockwise arcs. Thus this
-certificate can be computed in $O(n^2)$ operations. It certifies both a lower
-bound (one maximizing path) and a matching feasible fractional assignment.
-No numerical LP tolerance is part of an algorithmic decision.
-
-\section{Optimality for congruent demands}
-\begin{proposition}
-If every demand satisfies $y_j\equiv1\pmod{K-1}$, iterative rounding is
-optimal, for every input order and every tie choice. In particular, it is
-optimal for $K=2$ and arbitrary positive integer demands.
-\end{proposition}
-\begin{proof}
-After any admissible fixed prefix, each lower and upper supply bound is
-either $1$ or $K$. All edge weights in the preceding graph are consequently
-multiples of $h=K-1$. The constructed potentials $p_j$ are multiples of $h$,
-and $q_j=p_j-p_{j-1}+y_j$ is congruent to $1$ modulo $h$.
-For an unfixed slot it lies in $[1,K]$, so it must be either $1$ or $K$.
-The total-supply equality supplies exactly the remaining number of large
-deliveries. Thus every prefix LP has an integral optimal completion.
-
-At each step the LP score of a candidate therefore equals the cost of its
-best integral completion. Taking a minimum over the remaining candidates
-preserves the best completion cost of the current prefix. Induction from
-the empty prefix proves that the returned order is optimal. For $K=2$, the
-congruence assumption modulo $1$ is automatic.
-\end{proof}
-For $K\ge3$, integral demands need not satisfy this congruence.
-The following sections treat those cases.
-
-\section{A completion bound}
-\begin{lemma}
-For any feasible fixed prefix, the optimum integral completion has capacity
-at most $L+(K-1)$, where $L$ is the fractional optimum with that prefix.
-\end{lemma}
-\begin{proof}
-For a fractional solution write $P_j=\sum_{i\le j}p_i$ over the remaining slots.
-Replace $p_j$ by $b_j=\lfloor P_j\rfloor-\lfloor P_{j-1}\rfloor$.
-Because $0\le p_j\le1$, we have $b_j\in\{0,1\}$; because $P_r=m$ is integral,
-$\sum_jb_j=m$. The cumulative delivery error is
-$h(\lfloor P_j\rfloor-P_j)\in(-h,0]$. This shifts both the peak and trough
-at day $j$ by the same error. The range increases by at most $h$ and the
-fixed prefix is unchanged.
-\end{proof}
-For integral data the bound sharpens to $L+K-2$: use the integer supplies
-from the path certificate. The cumulative rounding error is then one of
-$0,-1,\ldots,-(K-2)$, rather than an arbitrary real number in $(-h,0]$.
-This lemma alone does not control the iterative algorithm: its decisions need
-not follow this particular completion. The next sections control every decision.
-
-\section{An exact formula after a prefix}
+\section{The fractional cost after a prefix}\label{sec:prefix}
 We now work in the normalized model with deliveries $0$ or $h=K-1$ and
 demands $d_j=y_j-1\ge0$. Let a fixed prefix have current inventory $s$,
 minimum inventory $A$, and maximum inventory $B$, including both types of
 event and the initial zero. Thus $A\le0\le B$ and $A\le s\le B$.
 Suppose the remaining demands are $e_1,\ldots,e_r$. The total required
 remaining supply $\sum e_i-s$ lies in $[0,rh]$.
-Define, with empty maxima interpreted as zero,
+The remaining demands impose three bounds: a prefix shortfall $D$, a
+terminal peak requirement $T$, and an internal band-width requirement $V$.
+Define them by the following maxima, taking empty maxima to be zero:
 \begin{align*}
 D&=\max\left(0,\max_{1\le j\le r}\left[\sum_{i=1}^j e_i-hj\right]\right),\\
 T&=\max\left(0,\max_{1\le i\le r}\left[\sum_{j=i}^r e_j-h(r-i)\right]\right),\\
@@ -252,7 +170,7 @@ Minimizing $\beta-\alpha$ under these three conditions proves the formula.
 For $r=0$, feasibility requires $s=0$ and the formula reduces to $B-A$.
 \end{proof}
 
-\section{The two choices cannot both cross the bound}
+\section{The rounding invariant}\label{sec:invariant}
 Let $L_0=L_{\rm init}-1$ be the initial LP value in the normalized model.
 Suppose both delivery sizes remain available. Let $d$ be the next demand,
 and let $D,T,V$ be computed from demands \emph{strictly after} that day.
@@ -266,7 +184,13 @@ There is at least one large and one small delivery left; consequently every
 $z\in[0,h]$ leaves a feasible total fractional supply for the later slots.
 After that delivery the prefix extrema and state are
 $\min(A,s+z-d)$, $\max(B,s+z)$, and $s+z-d$.
-Lemma~\ref{lem:prefix} therefore gives its exact score as
+Since $D\ge0$, Lemma~\ref{lem:prefix} gives the score
+\begin{align*}
+f(z)
+ &=\max\bigl(V,\ \max(B_*,s+z)-\min(A,s+z-R)\bigr)\\
+ &=\max\bigl(V,B_*-A,\ B_*+R-s-z,\ s+z-A,\ R\bigr).
+\end{align*}
+Grouping the terms that do not depend on $z$ yields
 \begin{equation}\label{eq:score}
 f(z)=\max(F,u-z,v+z).
 \end{equation}
@@ -287,16 +211,8 @@ trough at $b$ equals
 $\sum_{i=a}^b d_i-\sum_{i=a+1}^b z_i$, which is at least the displayed
 quantity. Thus each such quantity is a lower bound on the initial LP value.
 
-\begin{theorem}\label{thm:main}
-For positive integer demands and $x_i\in\{1,K\}$ with integer $K\ge2$,
-every run of iterative rounding satisfies
-\[
-C(q_{\rm IR})\le L_{\rm init}+K-2\le\OPT+K-2.
-\]
-In particular it is a 2-approximation. All choices among exactly tied
-minimum LP scores are permitted.
-\end{theorem}
-\begin{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
 Set $H=L_0+h-1$, an integer. We prove by induction that the normalized
 LP value after every fixing is at most $H$. The empty prefix satisfies
 this because $h\ge1$. If only one delivery size remains, the total-supply
@@ -338,7 +254,7 @@ $C(q_{\rm IR})\le L_{\rm init}+K-1$. Demands below one are outside this
 argument: their normalization would be negative, invalidating the reachability
 formula used above.
 
-\section{Sharpness for every integer delivery size}
+\section{Sharpness}\label{sec:sharpness}
 \begin{theorem}\label{thm:tight}
 For each integer $K\ge3$ there is an input with $n=2K-3$ such that
 original-index iterative rounding has
@@ -430,7 +346,7 @@ The construction uses exact LP ties and the specified original-index rule.
 It does not establish the same lower bound for every alternative tie-breaking
 rule, and it is not an impossibility result for other algorithms.
 
-\section{Computing the same decisions without LP solves}
+\section{Computing the rounding decisions}\label{sec:algorithm}
 The suffix quantities admit backwards recurrences. Index days from $1$ to
 $n$ and initialize $D_{n+1}=T_{n+1}=V_{n+1}=0$. Then
 \begin{align*}
@@ -448,40 +364,141 @@ original-index tie rule. Integer bit complexity also depends on input magnitude.
 The implementation is in \texttt{fast\_algorithm.py}; its fixed-example
 cross-checks against the cycle-path oracle are in \texttt{verify\_examples.py}.
 
-\section{Finite experiment and tie handling}
-The search independently enumerates binary delivery orders to obtain $\OPT$,
-and follows every candidate tied for the best exact LP value to obtain the
-largest possible iterative-rounding cost. Every such path is realizable by
-the stated input-index tie rule: take its resulting delivery sequence as
-the input order. At each step the next chosen delivery then has the first
-remaining original index.
+\section*{Acknowledgments and verification scope}
+Prepared by MathIsEvenEasier with OpenAI Codex (GPT-6 Astra).
+Research inspired by \texttt{@xamualexander}, Dr. Samuel Allen Alexander.
+Still there.
+The mathematical result and its formal statement remain subject to
+independent expert review; literature priority is unconfirmed. The current
+LP bridge is checked by Lean. The earlier independent Nanoda replay covers
+the original targets, as detailed in Appendix~\ref{app:verification}.
 
-The initial experiment also probed two stronger statements as possible proof guides:
-$C(q_{\rm IR})\le L_0+K-1$, and whether all unshifted inventory levels lie in
-$[-\OPT,\OPT]$. The origin-centered band statement is false. For example,
-$K=3$, $Y=(2,3,2)$ and input $X=(3,3,1)$ permit the returned order $(3,3,1)$,
-whose peak is $4$, although $(1,3,3)$ has capacity $3=\OPT$.
-The additive bound was not falsified and is strengthened by Theorem~\ref{thm:main}.
+\appendix
+\section{An interval-relaxation certificate}\label{app:interval}
+More generally let $q_j\in[\ell_j,u_j]$, with
+$\sum_j\ell_j\le\sum_j y_j\le\sum_j u_j$. Index post-consumption inventory
+vertices cyclically by $0,\ldots,n-1$, identifying $s_n=s_0$.
+For each day $j$ insert two directed edges:
+\[
+(j-1)\longrightarrow j\quad\text{of weight }\ell_j-y_j,
+\qquad
+j\longrightarrow(j-1)\quad\text{of weight }y_j-u_j.
+\]
+An edge $a\to b$ of weight $w$ means $s_b\ge s_a+w$.
+Let $d(i,j)$ be the maximum weight of a directed path from $i$ to $j$,
+including the empty path when $i=j$, and let $p_j=\max_i d(i,j)$.
 
-The Azure run checked 7,094,426 input trials and 47,073,459 tied algorithm
-paths in 240 seconds. The first 122,861 trials exhaust all positive-demand
-inputs with $2\le n\le6$, $2\le K\le5$ and both supply types present;
-the rest are random trials with $7\le n\le12$ and $2\le K\le25$ and may
-include repeats. No factor-two counterexample was found. The largest observed
-ratio was $12/7$, with $K=7$, $\OPT=7$, and algorithm cost $12$.
+\begin{proposition}
+The interval relaxation has exact value
+\[
+L=\max_{1\le j\le n}(p_j+y_j).
+\]
+A feasible solution is $q_j=p_j-p_{j-1}+y_j$, with cyclic indices.
+The formula uses only integer arithmetic when the inputs are integral.
+\end{proposition}
+\begin{proof}
+The assumptions ensure a feasible choice of supplies with the required total,
+so all directed cycles have nonpositive weight. Maximum path weights are
+finite and may be taken over simple paths. Every edge implies
+$p_b\ge p_a+w$, so the displayed $q_j$ satisfies all supply bounds.
+Its total telescopes to $\sum_jy_j$. Since empty paths give $p_j\ge0$,
+the inventory potential $p$ has troughs at least zero and peaks at most $L$;
+its capacity is at most $L$.
 
-A separate full assignment LP implementation agreed with 300 exact oracle
-evaluations. After deriving \eqref{eq:score}, 108 candidate scores on the nine
-record-setting examples were checked against the independent cycle-path oracle.
-Heavy enumeration ran only in Azure with an 8 GiB memory cap, a 12-minute
-worker limit, and an independent deletion guard. Both resource groups and all
-job resources were confirmed deleted at 13:02:59 UTC on 1 October 2026.
-The sharpness construction was derived algebraically, without an additional
-search. Five fixed instances at $K\in\{3,4,5,7,16\}$ were checked locally
-against the independent cycle-path oracle, including all 105 candidate scores
-and the claimed comparison schedules.
+For the reverse inequality, every feasible inventory satisfies
+$s_j-s_i\ge d(i,j)$. Capacity is at least the difference between the peak
+of day $j$ and any trough $i$, hence at least $y_j+d(i,j)$. Maximizing gives
+$C\ge L$. Translating the feasible potential to make $s_0=0$ preserves capacity.
+\end{proof}
+On a cycle, simple paths are clockwise or counterclockwise arcs. Thus this
+certificate can be computed in $O(n^2)$ operations. It certifies both a lower
+bound (one maximizing path) and a matching feasible fractional assignment.
+No numerical LP tolerance is part of an algorithmic decision.
 
-\section{Formal verification and reproducibility}
+\section{Congruent demands}\label{app:congruent}
+\begin{proposition}
+If every demand satisfies $y_j\equiv1\pmod{K-1}$, iterative rounding is
+optimal, for every input order and every tie choice. In particular, it is
+optimal for $K=2$ and arbitrary positive integer demands.
+\end{proposition}
+\begin{proof}
+After any admissible fixed prefix, each lower and upper supply bound is
+either $1$ or $K$. All edge weights in the graph of
+Appendix~\ref{app:interval} are consequently
+multiples of $h=K-1$. The constructed potentials $p_j$ are multiples of $h$,
+and $q_j=p_j-p_{j-1}+y_j$ is congruent to $1$ modulo $h$.
+For an unfixed slot it lies in $[1,K]$, so it must be either $1$ or $K$.
+The total-supply equality supplies exactly the remaining number of large
+deliveries. Thus every prefix LP has an integral optimal completion.
+
+At each step the LP score of a candidate therefore equals the cost of its
+best integral completion. Taking a minimum over the remaining candidates
+preserves the best completion cost of the current prefix. Induction from
+the empty prefix proves that the returned order is optimal. For $K=2$, the
+congruence assumption modulo $1$ is automatic.
+\end{proof}
+For $K\ge3$, integral demands need not satisfy this congruence;
+Theorem~\ref{thm:main} covers those cases.
+
+\section{A completion bound}\label{app:completion}
+\begin{lemma}
+For any feasible fixed prefix, the optimum integral completion has capacity
+at most $L+(K-1)$, where $L$ is the fractional optimum with that prefix.
+\end{lemma}
+\begin{proof}
+For a fractional solution write $P_j=\sum_{i\le j}p_i$ over the remaining slots.
+Replace $p_j$ by $b_j=\lfloor P_j\rfloor-\lfloor P_{j-1}\rfloor$.
+Because $0\le p_j\le1$, we have $b_j\in\{0,1\}$; because $P_r=m$ is integral,
+$\sum_jb_j=m$. The cumulative delivery error is
+$h(\lfloor P_j\rfloor-P_j)\in(-h,0]$. This shifts both the peak and trough
+at day $j$ by the same error. The range increases by at most $h$ and the
+fixed prefix is unchanged.
+\end{proof}
+For integral data the bound sharpens to $L+K-2$: use the integer supplies
+from the path certificate in Appendix~\ref{app:interval}. The cumulative rounding error is then one of
+$0,-1,\ldots,-(K-2)$, rather than an arbitrary real number in $(-h,0]$.
+This lemma alone does not control the iterative algorithm: its decisions need
+not follow this particular completion. The invariant in Section~\ref{sec:invariant} controls every decision.
+
+\section{Formal verification and the assignment-LP rule}\label{app:verification}
+The file \texttt{AssignmentLP.lean} defines the residual LP independently
+of the closed-form score. Its predicate \texttt{MatrixBand} consists of a
+nonnegative doubly stochastic assignment matrix, the inventory peak and
+trough inequalities, and the bounds imposed by the already fixed prefix.
+\texttt{LPValue} asserts both attainment and a lower bound for every feasible
+assignment. The theorem \texttt{matrixLP\_value} identifies this minimum with
+\texttt{prefixValue}+1; the added one restores original units.
+
+In \texttt{Algorithm1.lean}, \texttt{Algorithm1Run} compares these independently
+defined LP optima. The theorem \texttt{run\_iff\_algorithm1} proves that this
+rule and the score-based \texttt{Run} have exactly the same complete
+runs on every valid prefix. Validity requires only nonnegative normalized
+demands, correct remaining length and supply total, and consistent prefix
+extrema; it does not assume an LP formula. Candidate feasibility and minimum
+attainment are consequences of the preceding theorems.
+
+The corollaries \texttt{algorithm1\_additive\_guarantee} and
+\texttt{algorithm1\_ratio\_bound} directly transfer the bounds to the LP rule.
+\texttt{algorithm1\_two\_approximation} includes the all-small case, while
+\texttt{algorithm1\_exists} proves existence of a run and an actual integral
+schedule of its stated capacity. The theorem \texttt{sharp\_lp\_run} in
+\texttt{Result.lean} transfers the entire extremal family as well.
+All minimum-LP ties are allowed; the first-index rule is one permitted rule.
+This does not assert that all tie paths occur for a single fixed input order.
+
+\paragraph{Source convention.}
+Figure 1.1 on printed page 4 of Lorieau's thesis displays row and column
+bounds with $\le1$, whereas the text before Proposition 3.1.2 on printed
+page 16 explicitly calls the feasible matrices doubly stochastic.
+We formalize the standard assignment interpretation with row and column sums
+\emph{equal} to one and all supplies used. We do not assert equivalence with
+the literal weaker inequalities printed in Figure 1.1. Deleting fixed
+permutation rows and columns yields our residual matrix; adjoining them
+recovers the complete assignment. The relationship to the source's notation,
+including this explicit convention, remains open to mathematical review.
+
+
+\subsection*{Recorded verification}
 The original nine source modules were compiled in a clean Azure environment using Lean
 4.34.0 and mathlib commit
 \texttt{5ed2965256430c3649e86755f9576b54eca72435}.
@@ -542,7 +559,39 @@ verification is by Lean. Full diagnostics, exact source hashes, a rejected
 negative control, and resource-cleanup evidence accompany the new report
 \texttt{evidence/algorithm-bridge-audit.json}.
 
-\section{An initial experiment with alternative tie rules}
+\section{Computational experiments}\label{app:experiments}
+The search independently enumerates binary delivery orders to obtain $\OPT$,
+and follows every candidate tied for the best exact LP value to obtain the
+largest possible iterative-rounding cost. Every such path is realizable by
+the stated input-index tie rule: take its resulting delivery sequence as
+the input order. At each step the next chosen delivery then has the first
+remaining original index.
+
+An initial experiment tested whether all unshifted inventory levels lie in
+$[-\OPT,\OPT]$. This origin-centered band statement is false. For example,
+$K=3$, $Y=(2,3,2)$ and input $X=(3,3,1)$ permit the returned order $(3,3,1)$,
+whose peak is $4$, although $(1,3,3)$ has capacity $3=\OPT$.
+
+The Azure run checked 7,094,426 input trials and 47,073,459 tied algorithm
+paths in 240 seconds. The first 122,861 trials exhaust all positive-demand
+inputs with $2\le n\le6$, $2\le K\le5$ and both supply types present;
+the rest are random trials with $7\le n\le12$ and $2\le K\le25$ and may
+include repeats. No factor-two counterexample was found. The largest observed
+ratio was $12/7$, with $K=7$, $\OPT=7$, and algorithm cost $12$.
+
+A separate full assignment LP implementation agreed with 300 exact oracle
+evaluations. After deriving \eqref{eq:score}, 108 candidate scores on the nine
+record-setting examples were checked against the independent cycle-path oracle.
+Heavy enumeration ran only in Azure with an 8 GiB memory cap, a 12-minute
+worker limit, and an independent deletion guard. Both resource groups and all
+job resources were confirmed deleted at 13:02:59 UTC on 1 October 2026.
+The sharpness construction was derived algebraically, without an additional
+search. Five fixed instances at $K\in\{3,4,5,7,16\}$ were checked locally
+against the independent cycle-path oracle, including all 105 candidate scores
+and the claimed comparison schedules.
+
+
+\subsection*{Alternative tie rules}
 The tight family can behave better under another tie rule. However, always
 preferring the small delivery on an exact tie does not make the algorithm
 optimal. A bounded Azure experiment with seed 20261001 checked 10000 random
@@ -560,10 +609,18 @@ $5$ is present. This refutes exact optimality for that rule. It does not
 settle whether the rule has a better worst-case approximation factor.
 The interactive laboratory includes both this example and the sharpness family.
 
-\section{Attribution}
-Prepared by MathIsEvenEasier with OpenAI Codex (GPT-6 Astra).
-Research inspired by \texttt{@xamualexander}, Dr. Samuel Allen Alexander.
-Still there.
+\begin{thebibliography}{9}
+\bibitem{lorieau}
+L. Lorieau, \emph{Iterative Rounding algorithms for the Extended Gasoline
+Problem}, master's thesis, Grenoble INP--Ensimag, Universit\'e Grenoble
+Alpes, 2024. Conjecture 3.1.1, p.~21.
+\url{https://perso.limos.fr/~lulorieau/docs/thesis/Master_Thesis.pdf}.
 
-
+\bibitem{nikoleit}
+H. Nikoleit, A. Anand, A. M. Naredla and H. R\"oglin,
+\emph{The Art of Being Difficult: Combining Human and AI Strengths to
+Find Adversarial Instances for Heuristics}, arXiv:2601.16849, 2026,
+Section 2.2.4 and the two-dimensional Gasoline construction.
+\url{https://arxiv.org/abs/2601.16849}.
+\end{thebibliography}
 \end{document}
